@@ -26,7 +26,7 @@ Assuming a primary key of `id` and parent identifier of `parent_id`:
 ```php
 $laraHierarchy = new RCM\LaraHierarchy();
 
-$collection = User::select('id', 'parent_id', 'name');
+$collection = User::select('id', 'parent_id', 'name')->get();
 
 $hierarchy = $laraHierarchy->collectionToHierarchy($collection)->toArray();
 
