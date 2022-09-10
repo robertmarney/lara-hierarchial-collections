@@ -17,7 +17,7 @@ class LaraHierarchy
      */
     public function collectionToHierarchy(Collection $collection, string $parentIdentifier = 'parent_id', string $relationName = 'children', string $localIdentifier = 'id'): Collection
     {
-        [$starts, $children] = $collection->partition($parentIdentifier, '=', null);
+        [$starts, $children] = $collection->sortBy($parentIdentifier)->partition($parentIdentifier, '=', null);
 
         return $this->attachChildrenToParent($starts, $children, $parentIdentifier, $relationName, $localIdentifier);
     }
@@ -35,10 +35,11 @@ class LaraHierarchy
     private function attachChildrenToParent(Collection $levelItems, Collection $allItems, string $parentIdentifier = 'parent_id', string $relationName = 'children', string $localIdentifier = 'id'): Collection
     {
         return $levelItems->map(function ($item) use ($relationName, $parentIdentifier, $allItems, $localIdentifier) {
-            $allChildren = $allItems->where($parentIdentifier, $item->{$localIdentifier});
-            $item->setRelation($relationName, $allChildren);
-            if (count($allChildren) > 0) {
-                $this->attachChildrenToParent($item->{$relationName}, $allItems, $parentIdentifier, $relationName, $localIdentifier);
+            [$directChildren, $remainingItems] = $allItems->partition($parentIdentifier, '=', $item->{$localIdentifier});
+            $item->setRelation($relationName, $directChildren);
+
+            if (count($directChildren) > 0) {
+                $this->attachChildrenToParent($item->{$relationName}, $remainingItems, $parentIdentifier, $relationName, $localIdentifier);
             }
 
             return $item;

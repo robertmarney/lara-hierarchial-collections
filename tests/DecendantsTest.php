@@ -31,9 +31,9 @@ it('can handle single start node with child', function () {
 
     /* Assert */
     $this->assertCount(1, $result);
-    $this->assertEquals($result->first()->id, $parent->id);
+    $this->assertEquals($parent->id, $result->first()->id);
     $this->assertCount(1, $result->first()->children);
-    $this->assertEquals($result->first()->children->first()->id, $child->id);
+    $this->assertEquals($child->id, $result->first()->children->first()->id);
 });
 
 it('can handle multiple starts node with children', function () {
@@ -49,11 +49,11 @@ it('can handle multiple starts node with children', function () {
 
     /* Assert */
     $this->assertCount(2, $result);
-    $this->assertEquals($result->first()->id, $parent->id);
+    $this->assertEquals($parent->id, $result->first()->id);
     $this->assertCount(1, $result->first()->children);
-    $this->assertEquals($result->first()->children->first()->id, $child->id);
+    $this->assertEquals($child->id, $result->first()->children->first()->id);
     $this->assertCount(1, $result->last()->children);
-    $this->assertEquals($result->last()->children->first()->id, $child2->id);
+    $this->assertEquals($child2->id, $result->last()->children->first()->id);
 });
 
 it('can handle multiple children', function () {
@@ -68,13 +68,13 @@ it('can handle multiple children', function () {
 
     /* Assert */
     $this->assertCount(1, $result);
-    $this->assertEquals($result->first()->id, $parent->id);
+    $this->assertEquals($parent->id, $result->first()->id);
     $this->assertCount(2, $result->first()->children);
-    $this->assertEquals($result->first()->children->first()->id, $child->id);
-    $this->assertEquals($result->first()->children->last()->id, $child2->id);
+    $this->assertEquals($child->id, $result->first()->children->first()->id);
+    $this->assertEquals($child2->id, $result->first()->children->last()->id);
 });
 
-it('can handle 6 levels deep', function () {
+it('can handle 10 levels deep', function () {
     /* Setup */
     $collection = new Collection();
     $collection->push($parent = new BaseItem(['id' => 1]));
@@ -84,25 +84,36 @@ it('can handle 6 levels deep', function () {
     $collection->push($child4 = new BaseItem(['id' => 5, 'parent_id' => 4]));
     $collection->push($child5 = new BaseItem(['id' => 6, 'parent_id' => 5]));
     $collection->push($child6 = new BaseItem(['id' => 7, 'parent_id' => 6]));
+    $collection->push($child7 = new BaseItem(['id' => 8, 'parent_id' => 7]));
+    $collection->push($child8 = new BaseItem(['id' => 9, 'parent_id' => 8]));
+    $collection->push($child9 = new BaseItem(['id' => 10, 'parent_id' => 9]));
+    $collection->push($child10 = new BaseItem(['id' => 11, 'parent_id' => 9]));
 
     /* Transact */
     $result = $this->service->collectionToHierarchy($collection);
 
     /* Assert */
     $this->assertCount(1, $result);
-    $this->assertEquals($result->first()->id, $parent->id);
+    $this->assertEquals($parent->id, $result->first()->id);
     $this->assertCount(1, $children = $result->first()->children);
-    $this->assertEquals($children->first()->id, $child->id);
+    $this->assertEquals($child->id, $children->first()->id);
     $this->assertCount(1, $children = $children->first()->children);
-    $this->assertEquals($children->first()->id, $child2->id);
+    $this->assertEquals($child2->id, $children->first()->id);
     $this->assertCount(1, $children = $children->first()->children);
-    $this->assertEquals($children->first()->id, $child3->id);
+    $this->assertEquals($child3->id, $children->first()->id);
     $this->assertCount(1, $children = $children->first()->children);
-    $this->assertEquals($children->first()->id, $child4->id);
+    $this->assertEquals($child4->id, $children->first()->id);
     $this->assertCount(1, $children = $children->first()->children);
-    $this->assertEquals($children->first()->id, $child5->id);
+    $this->assertEquals($child5->id, $children->first()->id);
     $this->assertCount(1, $children = $children->first()->children);
-    $this->assertEquals($children->first()->id, $child6->id);
+    $this->assertEquals($child6->id, $children->first()->id);
+    $this->assertCount(1, $children = $children->first()->children);
+    $this->assertEquals($child7->id, $children->first()->id);
+    $this->assertCount(1, $children = $children->first()->children);
+    $this->assertEquals($child8->id, $children->first()->id);
+    $this->assertCount(2, $children = $children->first()->children);
+    $this->assertEquals($children->first()->id, $child9->id);
+    $this->assertEquals($children->last()->id, $child10->id);
 });
 
 it('can handle custom relation name', function () {
@@ -149,4 +160,36 @@ it('can handle custom parent identifier', function () {
 
     $this->assertCount(1, $result);
     $this->assertEquals($child->id, $result->first()->children->first()->id);
+});
+
+it('is not impacted by sort order', function () {
+    /* Setup */
+    $collection = new Collection();
+    $collection->push($parent = new BaseItem(['id' => 1]));
+    $collection->push($child4 = new BaseItem(['id' => 5, 'parent_id' => 4]));
+    $collection->push($child2 = new BaseItem(['id' => 3, 'parent_id' => 2]));
+    $collection->push($child = new BaseItem(['id' => 2, 'parent_id' => 1]));
+    $collection->push($child7 = new BaseItem(['id' => 8, 'parent_id' => 6]));
+    $collection->push($child3 = new BaseItem(['id' => 4, 'parent_id' => 3]));
+    $collection->push($child6 = new BaseItem(['id' => 7, 'parent_id' => 6]));
+    $collection->push($child5 = new BaseItem(['id' => 6, 'parent_id' => 5]));
+
+    /* Transact */
+    $result = $this->service->collectionToHierarchy($collection);
+
+    /* Assert */
+    $this->assertCount(1, $result);
+    $this->assertEquals($parent->id, $result->first()->id);
+    $this->assertCount(1, $children = $result->first()->children);
+    $this->assertEquals($child->id, $children->first()->id);
+    $this->assertCount(1, $children = $children->first()->children);
+    $this->assertEquals($child2->id, $children->first()->id);
+    $this->assertCount(1, $children = $children->first()->children);
+    $this->assertEquals($child3->id, $children->first()->id);
+    $this->assertCount(1, $children = $children->first()->children);
+    $this->assertEquals($child4->id, $children->first()->id);
+    $this->assertCount(1, $children = $children->first()->children);
+    $this->assertEquals($child5->id, $children->first()->id);
+    $this->assertCount(2, $children = $children->first()->children);
+    $this->assertEquals(collect([$child6->id, $child7->id]), $children->sort()->pluck('id'));
 });

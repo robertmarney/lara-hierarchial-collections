@@ -5,12 +5,20 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/robertmarney/lara-hierarchial-collections/Fix%20PHP%20code%20style%20issues?label=code%20style)](https://github.com/robertmarney/lara-hierarchial-collections/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/robertmarney/lara-hierarchial-collections.svg?style=flat-square)](https://packagist.org/packages/robertmarney/lara-hierarchial-collections)
 
-Package to extend collections of hierarchial data to organize data into nodes according to the hierarchy.
+Package to extend collections of hierarchical data to organize data into nodes according to the hierarchy.
 
-Use Cases:
+The package supports unlimited starting nodes, and has been tested to 10 levels deep.
+
+### Use Cases:
 
 * Organizational Charts
 * Chart of Accounts
+
+## Requirements:
+
+* Illuminate Collections 9+ (Packaged in Laravel 9+)
+* PHP 8.0
+
 
 ## Installation
 
@@ -20,16 +28,15 @@ You can install the package via composer:
 composer require robertmarney/lara-hierarchial-collections
 ```
 
-Y
 
 ## Basic Usage,
 
 Assuming a primary key of `id` and parent identifier of `parent_id`:
 
 ```php
-$laraHierarchy = new RCM\LaraHierarchy();
+$laraHierarchy = new RCM\LaraHierarchy\LaraHierarchy();
 
-$collection = User::select('id', 'parent_id', 'name')->get();
+$collection = User::select(['id', 'parent_id', 'name'])->get();
 
 $hierarchy = $laraHierarchy->collectionToHierarchy($collection)->toArray();
 
@@ -44,9 +51,9 @@ $hierarchy = $laraHierarchy->collectionToHierarchy($collection)->toArray();
             'id' => 1000,
             'parent_id' => 1,
             'name' => 'Sue Smith'
-            'children' => [...]
+            'children' => [//...]
         ],
-        ...
+        //...
     ]               
 ]
 ```
@@ -60,16 +67,33 @@ $hierarchy = $laraHierarchy->collectionToHierarchy($collection, localIdentifier:
 
 ### Customizing Parent Key:
 
-Similiarly,you can change the parent key
+Similiarly, you can change the parent key if the local relationship is not formed on the default `parent_id`
 
 ```php
 $hierarchy = $laraHierarchy->collectionToHierarchy($collection, parentIdentifier: 'custom_parent_id')
 ```
 
-### Changing the children property
+### Providing the `relationName` property will change the collection name where children will be placed
 
 ```php
-$hierarchy = $laraHierarchy->collectionToHierarchy($collection, relationName: 'descendants')
+$hierarchy = $laraHierarchy->collectionToHierarchy($collection, relationName: 'descendants')->toArray();
+
+// Result:
+
+[
+    'id' => 1,
+    'parent_id' => null,
+    'name' => 'John Doe'
+    'descendants' => [
+        [
+            'id' => 1000,
+            'parent_id' => 1,
+            'name' => 'Sue Smith'
+            'descendants' => [//...]
+        ],
+        //...
+    ]               
+]
 ```
 
 
