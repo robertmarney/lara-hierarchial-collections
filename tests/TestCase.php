@@ -11,7 +11,6 @@ class TestCase extends Orchestra
         parent::setUp();
     }
 
-
     public function getEnvironmentSetUp($app)
     {
     }
