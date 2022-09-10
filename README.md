@@ -5,9 +5,12 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/robertmarney/lara-hierarchial-collections/Fix%20PHP%20code%20style%20issues?label=code%20style)](https://github.com/robertmarney/lara-hierarchial-collections/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/robertmarney/lara-hierarchial-collections.svg?style=flat-square)](https://packagist.org/packages/robertmarney/lara-hierarchial-collections)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+Package to extend collections of hierarchial data to organize data into nodes according to the hierarchy.
 
+Use Cases:
 
+* Organizational Charts
+* Chart of Accounts
 
 ## Installation
 
