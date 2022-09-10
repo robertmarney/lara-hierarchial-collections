@@ -1,9 +1,9 @@
 # Transforms flat collections to a nested hierarchy
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/robertmarney/laraHierarchialCollections.svg?style=flat-square)](https://packagist.org/packages/robertmarney/laraHierarchialCollections)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/robertmarney/laraHierarchialCollections/run-tests?label=tests)](https://github.com/robertmarney/laraHierarchialCollections/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/robertmarney/laraHierarchialCollections/Fix%20PHP%20code%20style%20issues?label=code%20style)](https://github.com/robertmarney/laraHierarchialCollections/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/robertmarney/laraHierarchialCollections.svg?style=flat-square)](https://packagist.org/packages/robertmarney/laraHierarchialCollections)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/robertmarney/lara-hierarchial-collections.svg?style=flat-square)](https://packagist.org/packages/robertmarney/lara-hierarchial-collections)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/robertmarney/lara-hierarchial-collections/run-tests?label=tests)](https://github.com/robertmarney/lara-hierarchial-collections/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/robertmarney/lara-hierarchial-collections/Fix%20PHP%20code%20style%20issues?label=code%20style)](https://github.com/robertmarney/lara-hierarchial-collections/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/robertmarney/lara-hierarchial-collections.svg?style=flat-square)](https://packagist.org/packages/robertmarney/lara-hierarchial-collections)
 
 This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
 
@@ -14,7 +14,7 @@ This is where your description should go. Limit it to a paragraph or two. Consid
 You can install the package via composer:
 
 ```bash
-composer require robertmarney/laraHierarchialCollections
+composer require robertmarney/lara-hierarchial-collections
 ```
 
 Y
