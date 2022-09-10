@@ -1,12 +1,12 @@
 {
-    "name": "robertmarney/lara-hierarchy",
+    "name": "robertmarney/laraHierarchialCollections",
     "description": "Transforms flat collections to a nested hierarchy",
     "keywords": [
         "robertmarney",
         "laravel",
         "lara-hierarchy"
     ],
-    "homepage": "https://github.com/robertmarney/lara-hierarchy",
+    "homepage": "https://github.com/robertmarney/laraHierarchialCollections",
     "license": "MIT",
     "authors": [
         {
