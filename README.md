@@ -31,6 +31,8 @@ composer require robertmarney/lara-hierarchial-collections
 
 ## Basic Usage,
 
+The tool accepts Support Collections or Eloquent Collections, within the collection we expect Eloquent Models or `StdClass` objects.
+
 Assuming a primary key of `id` and parent identifier of `parent_id`:
 
 ```php

@@ -193,3 +193,42 @@ it('is not impacted by sort order', function () {
     $this->assertCount(2, $children = $children->first()->children);
     $this->assertEquals(collect([$child6->id, $child7->id]), $children->sort()->pluck('id'));
 });
+
+it('can work with support collections', function () {
+    $collection = collect();
+    $collection->push($parent = new BaseItem(['id' => 1]));
+    $collection->push($child = new BaseItem(['id' => 2, 'parent_id' => 1]));
+
+    /* Transact */
+    $result = $this->service->collectionToHierarchy($collection);
+
+    /* Assert */
+    $this->assertCount(1, $result);
+    $this->assertEquals($parent->id, $result->first()->id);
+    $this->assertCount(1, $result->first()->children);
+    $this->assertEquals($child->id, $result->first()->children->first()->id);
+});
+
+it('can work with support collections of stdClass', function () {
+    $collection = collect();
+
+    $parent = new stdClass();
+    $parent->id = 1;
+    $parent->parent_id = null;
+
+    $child = new stdClass();
+    $child->id = 2;
+    $child->parent_id = 1;
+
+    $collection->push($parent);
+    $collection->push($child);
+
+    /* Transact */
+    $result = $this->service->collectionToHierarchy($collection);
+
+    /* Assert */
+    $this->assertCount(1, $result);
+    $this->assertEquals($parent->id, $result->first()->id);
+    $this->assertCount(1, $result->first()->children);
+    $this->assertEquals($child->id, $result->first()->children->first()->id);
+});
