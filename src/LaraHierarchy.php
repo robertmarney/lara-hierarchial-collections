@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 class LaraHierarchy
 {
     /**
-     * Take a flat collection and transform into a hierarchical collection
+     * Take a flat collection of objects and transform into a hierarchical collection
      *
      * @param  Collection  $collection       - Data to be translated to a hierarchy of nodes.
      * @param  string  $parentIdentifier - default: 'parent_id'
@@ -36,9 +36,14 @@ class LaraHierarchy
     {
         return $levelItems->map(function ($item) use ($relationName, $parentIdentifier, $allItems, $localIdentifier) {
             [$directChildren, $remainingItems] = $allItems->partition($parentIdentifier, '=', $item->{$localIdentifier});
-            $item->setRelation($relationName, $directChildren);
 
-            if (count($directChildren) > 0) {
+            if (method_exists($item, 'setRelation')) {
+                $item->setRelation($relationName, $directChildren);
+            } else {
+                $item->{$relationName} = $directChildren;
+            }
+
+            if (! empty($directChildren)) {
                 $this->attachChildrenToParent($item->{$relationName}, $remainingItems, $parentIdentifier, $relationName, $localIdentifier);
             }
 
