@@ -16,8 +16,8 @@ The package supports unlimited starting nodes, and has been tested to 10 levels 
 
 ## Requirements:
 
-* Illuminate Collections 8+/9+ (Packaged in Laravel 8+/9+)
-* PHP 8.0 / 8.1
+* Illuminate Collections 8+/9+/10+ (Packaged in Laravel 8+/9+/10+)
+* PHP 8.0 / 8.1 / 8.2
 
 
 ## Installation

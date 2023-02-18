@@ -13,7 +13,6 @@ class LaraHierarchy
      * @param  string  $parentIdentifier - default: 'parent_id'
      * @param  string  $relationName     - default: 'children
      * @param  string  $localIdentifier  - default 'id'
-     * @return Collection
      */
     public function collectionToHierarchy(Collection $collection, string $parentIdentifier = 'parent_id', string $relationName = 'children', string $localIdentifier = 'id'): Collection
     {
@@ -24,13 +23,6 @@ class LaraHierarchy
 
     /**
      * Recursively append child objects to a collection of parents.
-     *
-     * @param  Collection  $levelItems
-     * @param  Collection  $allItems
-     * @param  string  $parentIdentifier
-     * @param  string  $relationName
-     * @param  string  $localIdentifier
-     * @return Collection
      */
     private function attachChildrenToParent(Collection $levelItems, Collection $allItems, string $parentIdentifier = 'parent_id', string $relationName = 'children', string $localIdentifier = 'id'): Collection
     {
