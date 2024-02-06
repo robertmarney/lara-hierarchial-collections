@@ -9,9 +9,9 @@ class LaraHierarchy
     /**
      * Take a flat collection of objects and transform into a hierarchical collection
      *
-     * @param  Collection  $collection       - Data to be translated to a hierarchy of nodes.
-     * @param  string  $parentIdentifier - default: 'parent_id'
-     * @param  string  $relationName     - default: 'children
+     * @param  Collection  $collection  - Data to be translated to a hierarchy of nodes.
+     * @param  string  $parentIdentifier  - default: 'parent_id'
+     * @param  string  $relationName  - default: 'children
      * @param  string  $localIdentifier  - default 'id'
      */
     public function collectionToHierarchy(Collection $collection, string $parentIdentifier = 'parent_id', string $relationName = 'children', string $localIdentifier = 'id'): Collection
