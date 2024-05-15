@@ -3,6 +3,7 @@
 namespace RCM\LaraHierarchy\Tests;
 
 use Orchestra\Testbench\TestCase as Orchestra;
+use RCM\LaraHierarchy\HierarchicalServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -11,6 +12,13 @@ class TestCase extends Orchestra
         parent::setUp();
     }
 
+
+    protected function getPackageProviders($app): array
+    {
+        return [
+            HierarchicalServiceProvider::class,
+        ];
+    }
     public function getEnvironmentSetUp($app)
     {
     }

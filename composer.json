@@ -4,7 +4,10 @@
     "keywords": [
         "robertmarney",
         "laravel",
-        "lara-hierarchy"
+        "lara-hierarchy",
+        "collections",
+        "chart of accounts",
+        "org chart"
     ],
     "homepage": "https://github.com/robertmarney/lara-hierarchial-collections",
     "license": "MIT",
@@ -59,7 +62,10 @@
         "laravel": {
             "aliases": {
                 "LaraHierarchy": "RCM\\LaraHierarchy\\Facades\\LaraHierarchy"
-            }
+            },
+            "providers": [
+                "RCM\\LaraHierarchy\\HierarchicalServiceProvider"
+            ]
         }
     },
     "minimum-stability": "dev",

@@ -99,6 +99,17 @@ $hierarchy = (new Hierarchical($collection, relationName: 'descendants'))->toArr
 ]
 ```
 
+### Collection Macro (Laravel Only):
+
+The package also provides a collection macro to easily convert collections to a hierarchy:
+
+```php  
+
+$collection = User::select(['id', 'parent_id', 'name'])->get();
+$result = $collection->toHierarchical();
+
+```
+
 ### Helper Methods:
 
 #### Ancestors
