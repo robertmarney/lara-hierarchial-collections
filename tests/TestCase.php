@@ -12,13 +12,13 @@ class TestCase extends Orchestra
         parent::setUp();
     }
 
-
     protected function getPackageProviders($app): array
     {
         return [
             HierarchicalServiceProvider::class,
         ];
     }
+
     public function getEnvironmentSetUp($app)
     {
     }
