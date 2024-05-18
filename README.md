@@ -28,12 +28,146 @@ You can install the package via composer:
 composer require robertmarney/lara-hierarchial-collections
 ```
 
-
 ## Basic Usage,
+
 
 The tool accepts Support Collections or Eloquent Collections, within the collection we expect Eloquent Models or `StdClass` objects.
 
 Assuming a primary key of `id` and parent identifier of `parent_id`:
+
+```php
+
+$collection = User::select(['id', 'parent_id', 'name'])->get();
+
+$hierarchy = Hierarchical::make($collection);    // or new Hierarchical($collection);
+
+$result = $hierarchy->toArray();
+
+// Result:
+
+[
+    'id' => 1,
+    'parent_id' => null,
+    'name' => 'John Doe'
+    'children' => [
+        [
+            'id' => 1000,
+            'parent_id' => 1,
+            'name' => 'Sue Smith'
+            'children' => [//...]
+        ],
+        //...
+    ]               
+]
+```
+### Customizing Local Key:
+
+If you are not using ids (eg uuid) you can override the local comparison value:
+
+```php
+$hierarchy = new Hierarchical($collection, localIdentifier: 'custom_primary_key')
+```
+
+### Customizing Parent Key:
+
+Similiarly, you can change the parent key if the local relationship is not formed on the default `parent_id`
+
+```php
+$hierarchy = new Hierarchical($collection, parentIdentifier: 'custom_parent_id')
+```
+
+### Providing the `relationName` property will change the collection name where children will be placed
+
+```php
+$hierarchy = (new Hierarchical($collection, relationName: 'descendants'))->toArray();
+
+// Result:
+
+[
+    'id' => 1,
+    'parent_id' => null,
+    'name' => 'John Doe'
+    'descendants' => [
+        [
+            'id' => 1000,
+            'parent_id' => 1,
+            'name' => 'Sue Smith'
+            'descendants' => [//...]
+        ],
+        //...
+    ]               
+]
+```
+
+### Collection Macro (Laravel Only):
+
+The package also provides a collection macro to easily convert collections to a hierarchy:
+
+```php  
+
+$collection = User::select(['id', 'parent_id', 'name'])->get();
+$result = $collection->toHierarchical();
+
+```
+
+### Helper Methods:
+
+#### Ancestors
+
+```php
+
+Hierarchical::make($collection)->ancestorsOf($id); // Will resolve all ancestors of the given id
+
+Hierarchical::make($collection)->ancestorsOf($item); // Will resolve all ancestors of the given item
+
+```
+#### Descendants
+
+```php
+
+Hierarchical::make($collection)->descendantsOf($id); // Will resolve all descendants of the given id`
+
+Hierarchical::make($collection)->descendantsOf($item); // Will resolve all descendants of the given item
+```
+
+#### Siblings
+
+```php
+
+Hierarchical::make($collection)->siblingsOf($id); // Will resolve all siblings of the given id
+
+Hierarchical::make($collection)->siblingsOf($item); // Will resolve all siblings of the given item
+```
+
+#### Depth
+
+```php
+Hierarchical::make($collection)->depthOf($id); // Will resolve the depth of the given id (eg 0, 1, 2, 3, ...)
+
+Hierarchical::make($collection)->depthOf($item); // Will resolve the depth of the given item
+```
+
+#### Fluent Comparison
+
+```php
+
+Hierarchical::make($collection)->is($id)->siblingOf($id); // boolean
+
+Hierarchical::make($collection)->is($item)->siblingOf($item); // boolean
+
+Hierarchical::make($collection)->is($id)->childOf($id); // boolean
+
+Hierarchical::make($collection)->is($item)->childOf($item); // boolean
+
+Hierarchical::make($collection)->is($id)->ancestorOf($id); // boolean
+
+Hierarchical::make($collection)->is($item)->ancestorOf($item); // boolean
+
+
+```
+
+
+### Legacy Usage (Deprecated)
 
 ```php
 $laraHierarchy = new RCM\LaraHierarchy\LaraHierarchy();
