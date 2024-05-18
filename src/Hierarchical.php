@@ -4,22 +4,36 @@ namespace RCM\LaraHierarchy;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
 
+/**
+ * @implements Arrayable<int, object>
+ */
 class Hierarchical implements Arrayable
 {
     private object $testItem;
 
+    /**
+     * @param  Collection<int, object>  $items
+     */
     public function __construct(private Collection $items, private string $parentIdentifier = 'parent_id', private string $relationName = 'children', private string $localIdentifier = 'id')
     {
     }
 
-    public static function make(...$args): Hierarchical
+    /**
+     * Create a new instance of the Hierarchical class
+     *
+     * @param  Collection<int, object>  $items
+     */
+    public static function make(Collection $items, string $parentIdentifier = 'parent_id', string $relationName = 'children', string $localIdentifier = 'id'): Hierarchical
     {
-        return new self(...$args);
+        return new self($items, $parentIdentifier, $relationName, $localIdentifier);
     }
 
     /**
      * Returns the hierarchy as an array
+     *
+     * @return array<int, object>
      */
     public function toArray(): array
     {
@@ -28,6 +42,8 @@ class Hierarchical implements Arrayable
 
     /**
      * Returns a full hierarchy of the items
+     *
+     * @return Collection<int, object>
      */
     public function collection(): Collection
     {
@@ -37,13 +53,42 @@ class Hierarchical implements Arrayable
     }
 
     /**
-     * Returns a sparse hierarchy of descendants of the given id
+     * @param  Collection<int, object>  $levelItems
+     * @param  Collection<int, object>  $allItems
+     * @return Collection<int, object>
      */
-    public function descendantsOf($id): Collection
+    private function attachChildrenToParent(Collection $levelItems, Collection $allItems): Collection
     {
-        $startingValue = $this->items->firstWhere($this->localIdentifier, $id);
+        return $levelItems->map(function (object $item) use ($allItems) {
+            [$directChildren, $remainingItems] = $allItems->partition($this->parentIdentifier, '=', $this->getKey($item));
 
-        if (! $startingValue) {
+            if (method_exists($item, 'setRelation')) {
+                $item->setRelation($this->relationName, $directChildren->values());
+            } else {
+                $item->{$this->relationName} = $directChildren->values();
+            }
+
+            if (! empty($directChildren)) {
+                $this->attachChildrenToParent($item->{$this->relationName}, $remainingItems);
+            }
+
+            return $item;
+        })->values();
+    }
+
+    private function getKey(object $item): mixed
+    {
+        return $item->{$this->localIdentifier};
+    }
+
+    /**
+     * Returns a sparse hierarchy of descendants of the given id
+     *
+     * @return Collection<int, object>
+     */
+    public function descendantsOf(mixed $itemOrId): Collection
+    {
+        if (! $startingValue = $this->toItem($itemOrId)) {
             return new Collection();
         }
 
@@ -52,28 +97,13 @@ class Hierarchical implements Arrayable
     }
 
     /**
-     * Returns a sparse hierarchy of ancestors of the given id
-     */
-    public function ancestorsOf(mixed $itemOrId): Collection
-    {
-        $id = $this->toId($itemOrId);
-        $endingValue = $this->items->firstWhere($this->localIdentifier, $id);
-
-        if (! $endingValue) {
-            return new Collection();
-        }
-
-        return $this->attachToParent($endingValue);
-    }
-
-    /**
      * Returns a collection of all siblings (not including the item itself)
+     *
+     * @return Collection<int, object>
      */
     public function siblingsOf(mixed $itemOrId): Collection
     {
-        $item = $this->toItem($itemOrId);
-
-        if (! $item) {
+        if (! $item = $this->toItem($itemOrId)) {
             return new Collection();
         }
 
@@ -83,12 +113,40 @@ class Hierarchical implements Arrayable
             ->values();
     }
 
+    private function toItem(mixed $itemOrId): ?object
+    {
+        if (is_object($itemOrId)) {
+            return $itemOrId;
+        }
+
+        return $this->findById($itemOrId);
+    }
+
+    /**
+     * Find an item by its local identifier
+     */
+    public function findById(mixed $id): ?object
+    {
+        return $this->items->firstWhere($this->localIdentifier, $id);
+    }
+
+    private function getParentKey(object $item): mixed
+    {
+        return $item->{$this->parentIdentifier};
+    }
+
     /**
      * Initialize the test item for fluent comparison
      */
     public function is(mixed $itemOrId): static
     {
-        $this->testItem = $this->toItem($itemOrId);
+        $item = $this->toItem($itemOrId);
+
+        if (! $item) {
+            throw new InvalidArgumentException('Item not found');
+        }
+
+        $this->testItem = $item;
 
         return $this;
 
@@ -123,50 +181,34 @@ class Hierarchical implements Arrayable
     }
 
     /**
-     * Returns the integer depth of the given item in the hierarchy
+     * Returns a sparse hierarchy of ancestors of the given id
+     *
+     * @return Collection<int, object>
      */
-    public function depthOf(mixed $itemOrId): ?int
+    public function ancestorsOf(mixed $itemOrId): Collection
     {
-        $item = $this->toItem($itemOrId);
+        $id = $this->toId($itemOrId);
 
-        return $this->depth($item);
-    }
-
-    /**
-     * Find an item by its local identifier
-     */
-    public function findById(mixed $id): ?object
-    {
-        return $this->items->firstWhere($this->localIdentifier, $id);
-    }
-
-    /**
-     * Test if item is a sibling of the given item
-     */
-    public function siblingOf(mixed $itemOrId): bool
-    {
-        if (! $target = $this->toItem($itemOrId)) {
-            return false;
+        if (! $endingValue = $this->items->firstWhere($this->localIdentifier, $id)) {
+            return new Collection();
         }
 
-        if ($this->getKey($target) === $this->getKey($this->testItem)) {
-            return false;
-        }
-
-        return $this->getParentKey($this->testItem) === $this->getParentKey($target);
-
+        return $this->attachToParent($endingValue);
     }
 
-    private function toItem(mixed $itemOrId): ?object
+    private function toId(mixed $itemOrId): mixed
     {
         if (is_object($itemOrId)) {
-            return $itemOrId;
+            return $itemOrId->{$this->localIdentifier};
         }
 
-        return $this->findById($itemOrId);
+        return $itemOrId;
     }
 
-    private function attachToParent($item): Collection
+    /**
+     * @return Collection<int, object>
+     */
+    private function attachToParent(object $item): Collection
     {
         $parent = $this->items->firstWhere($this->localIdentifier, $this->getParentKey($item));
 
@@ -184,28 +226,24 @@ class Hierarchical implements Arrayable
 
     }
 
-    private function attachChildrenToParent(Collection $levelItems, Collection $allItems): Collection
+    /**
+     * Returns the integer depth of the given item in the hierarchy
+     */
+    public function depthOf(mixed $itemOrId): ?int
     {
-        return $levelItems->map(function ($item) use ($allItems) {
-            [$directChildren, $remainingItems] = $allItems->partition($this->parentIdentifier, '=', $this->getKey($item));
+        if (! $item = $this->toItem($itemOrId)) {
+            return null;
+        }
 
-            if (method_exists($item, 'setRelation')) {
-                $item->setRelation($this->relationName, $directChildren->values());
-            } else {
-                $item->{$this->relationName} = $directChildren->values();
-            }
-
-            if (! empty($directChildren)) {
-                $this->attachChildrenToParent($item->{$this->relationName}, $remainingItems);
-            }
-
-            return $item;
-        })->values();
+        return $this->depth($item);
     }
 
     private function depth(mixed $itemOrId, int $depth = 0): int
     {
-        $item = $this->toItem($itemOrId);
+
+        if (! $item = $this->toItem($itemOrId)) {
+            return $depth;
+        }
 
         if ($this->getParentKey($item) === null) {
             return $depth;
@@ -216,22 +254,20 @@ class Hierarchical implements Arrayable
         return $this->depth($parent, $depth + 1);
     }
 
-    private function getParentKey(object $item): mixed
+    /**
+     * Test if item is a sibling of the given item
+     */
+    public function siblingOf(mixed $itemOrId): bool
     {
-        return $item->{$this->parentIdentifier};
-    }
-
-    private function getKey(object $item): mixed
-    {
-        return $item->{$this->localIdentifier};
-    }
-
-    private function toId(mixed $itemOrId): mixed
-    {
-        if (is_object($itemOrId)) {
-            return $itemOrId->{$this->localIdentifier};
+        if (! $target = $this->toItem($itemOrId)) {
+            return false;
         }
 
-        return $itemOrId;
+        if ($this->getKey($target) === $this->getKey($this->testItem)) {
+            return false;
+        }
+
+        return $this->getParentKey($this->testItem) === $this->getParentKey($target);
+
     }
 }
