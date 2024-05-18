@@ -6,11 +6,6 @@ use Illuminate\Support\Collection;
 
 class LaraHierarchy
 {
-    public function __construct()
-    {
-
-    }
-
     /**
      * @deprecated - Use Hierarchical::make($args)->toCollection() instead
      * Take a flat collection of objects and transform into a hierarchical collection

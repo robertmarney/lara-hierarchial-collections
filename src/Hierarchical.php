@@ -140,9 +140,7 @@ class Hierarchical implements Arrayable
      */
     public function is(mixed $itemOrId): static
     {
-        $item = $this->toItem($itemOrId);
-
-        if (! $item) {
+        if (! $item = $this->toItem($itemOrId)) {
             throw new InvalidArgumentException('Item not found');
         }
 
@@ -240,7 +238,6 @@ class Hierarchical implements Arrayable
 
     private function depth(mixed $itemOrId, int $depth = 0): int
     {
-
         if (! $item = $this->toItem($itemOrId)) {
             return $depth;
         }
@@ -268,6 +265,5 @@ class Hierarchical implements Arrayable
         }
 
         return $this->getParentKey($this->testItem) === $this->getParentKey($target);
-
     }
 }
