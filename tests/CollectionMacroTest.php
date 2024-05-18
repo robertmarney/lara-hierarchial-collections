@@ -9,7 +9,6 @@ it('can be used as macro on collection', function () {
     $collection->push(new BaseItem(['id' => 2, 'parent_id' => 1]));
     $collection->push(new BaseItem(['id' => 3, 'parent_id' => 1]));
 
-
     $result = $collection->toHierarchical();
     $this->assertTrue($result instanceof Hierarchical);
     $this->assertCount(1, $result->collection());
