@@ -6,7 +6,7 @@ use RCM\LaraHierarchy\Tests\Fixtures\BaseItem;
 
 it('can handle multiple start nodes with no children', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push(new BaseItem(['id' => 1]));
     $collection->push(new BaseItem(['id' => 2]));
 
@@ -19,7 +19,7 @@ it('can handle multiple start nodes with no children', function () {
 
 it('can handle single start node with child', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push($parent = new BaseItem(['id' => 1]));
     $collection->push($child = new BaseItem(['id' => 2, 'parent_id' => 1]));
 
@@ -35,7 +35,7 @@ it('can handle single start node with child', function () {
 
 it('can handle multiple starts node with children', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push($parent = new BaseItem(['id' => 1]));
     $collection->push($child = new BaseItem(['id' => 2, 'parent_id' => 1]));
     $collection->push(new BaseItem(['id' => 3]));
@@ -55,7 +55,7 @@ it('can handle multiple starts node with children', function () {
 
 it('can handle multiple children', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push($parent = new BaseItem(['id' => 1]));
     $collection->push($child = new BaseItem(['id' => 2, 'parent_id' => 1]));
     $collection->push($child2 = new BaseItem(['id' => 3, 'parent_id' => 1]));
@@ -73,7 +73,7 @@ it('can handle multiple children', function () {
 
 it('can handle 10 levels deep', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push($parent = new BaseItem(['id' => 1]));
     $collection->push($child = new BaseItem(['id' => 2, 'parent_id' => 1]));
     $collection->push($child2 = new BaseItem(['id' => 3, 'parent_id' => 2]));
@@ -115,7 +115,7 @@ it('can handle 10 levels deep', function () {
 
 it('can handle custom relation name', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push($parent = new BaseItem(['id' => 1]));
     $collection->push($child = new BaseItem(['id' => 2, 'parent_id' => 1]));
 
@@ -131,7 +131,7 @@ it('can handle custom relation name', function () {
 
 it('can handle custom local identifier', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push(new BaseItem(['custom_primary_key' => 1]));
     $collection->push($child = new BaseItem(['custom_primary_key' => 2, 'parent_id' => 1]));
 
@@ -146,7 +146,7 @@ it('can handle custom local identifier', function () {
 
 it('can handle custom parent identifier', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push(new BaseItem(['id' => 1]));
     $collection->push($child = new BaseItem(['id' => 2, 'custom_parent_id' => 1]));
 
@@ -161,7 +161,7 @@ it('can handle custom parent identifier', function () {
 
 it('is not impacted by sort order', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push($parent = new BaseItem(['id' => 1]));
     $collection->push($child4 = new BaseItem(['id' => 5, 'parent_id' => 4]));
     $collection->push($child2 = new BaseItem(['id' => 3, 'parent_id' => 2]));
@@ -209,11 +209,11 @@ it('can work with support collections', function () {
 it('can work with support collections of stdClass', function () {
     $collection = collect();
 
-    $parent = new stdClass();
+    $parent = new stdClass;
     $parent->id = 1;
     $parent->parent_id = null;
 
-    $child = new stdClass();
+    $child = new stdClass;
     $child->id = 2;
     $child->parent_id = 1;
 
@@ -232,7 +232,7 @@ it('can work with support collections of stdClass', function () {
 
 it('can be made', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push(new BaseItem(['id' => 1]));
     $collection->push(new BaseItem(['id' => 2]));
 
@@ -248,7 +248,7 @@ it('can be made', function () {
 
 it('can serialize deep arrays', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push($parent = new BaseItem(['id' => 1]));
     $collection->push($child = new BaseItem(['id' => 2, 'parent_id' => $parent->id]));
     $collection->push($parent2 = new BaseItem(['id' => 3]));
@@ -297,7 +297,7 @@ it('can serialize deep arrays', function () {
 
 it('can start at a specific parent', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push($parent = new BaseItem(['id' => 1]));
     $collection->push($child = new BaseItem(['id' => 2, 'parent_id' => $parent->id]));
     $collection->push($child2 = new BaseItem(['id' => 3, 'parent_id' => $parent->id]));
@@ -320,7 +320,7 @@ it('can start at a specific parent', function () {
 
 it('can prepare a list of ancestors', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push($parent = new BaseItem(['id' => 1]));
     $collection->push($child = new BaseItem(['id' => 2, 'parent_id' => $parent->id]));
     $collection->push($child2 = new BaseItem(['id' => 3, 'parent_id' => $parent->id]));
@@ -344,7 +344,7 @@ it('can prepare a list of ancestors', function () {
 
 it('can test if items are siblings', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push($parent = new BaseItem(['id' => 1]));
     $collection->push($child = new BaseItem(['id' => 2, 'parent_id' => $parent->id]));
     $collection->push($child2 = new BaseItem(['id' => 3, 'parent_id' => $parent->id]));
@@ -365,7 +365,7 @@ it('can test if items are siblings', function () {
 it('can test if items are children of item', function () {
 
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
 
     $collection->push($parent = new BaseItem(['id' => 1]));
     $collection->push($child = new BaseItem(['id' => 2, 'parent_id' => $parent->id]));
@@ -384,7 +384,7 @@ it('can test if items are children of item', function () {
 it('can test if items are ancestors of item', function () {
 
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
 
     $collection->push($parent = new BaseItem(['id' => 1]));
     $collection->push($child = new BaseItem(['id' => 2, 'parent_id' => $parent->id]));
@@ -402,7 +402,7 @@ it('can test if items are ancestors of item', function () {
 
 it('can measure the depth of items', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
 
     $collection->push($parent = new BaseItem(['id' => 1]));
     $collection->push($child = new BaseItem(['id' => 2, 'parent_id' => $parent->id]));
@@ -418,7 +418,7 @@ it('can measure the depth of items', function () {
 
 it('can find the direct siblings of an item', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
 
     $collection->push($parent = new BaseItem(['id' => 1]));
     $collection->push($child = new BaseItem(['id' => 2, 'parent_id' => $parent->id]));
