@@ -4,12 +4,12 @@ use Illuminate\Database\Eloquent\Collection;
 use RCM\LaraHierarchy\Tests\Fixtures\BaseItem;
 
 beforeEach(function () {
-    $this->service = new RCM\LaraHierarchy\LaraHierarchy();
+    $this->service = new RCM\LaraHierarchy\LaraHierarchy;
 });
 
 it('can handle multiple start nodes with no children', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push(new BaseItem(['id' => 1]));
     $collection->push(new BaseItem(['id' => 2]));
 
@@ -22,7 +22,7 @@ it('can handle multiple start nodes with no children', function () {
 
 it('can handle single start node with child', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push($parent = new BaseItem(['id' => 1]));
     $collection->push($child = new BaseItem(['id' => 2, 'parent_id' => 1]));
 
@@ -38,7 +38,7 @@ it('can handle single start node with child', function () {
 
 it('can handle multiple starts node with children', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push($parent = new BaseItem(['id' => 1]));
     $collection->push($child = new BaseItem(['id' => 2, 'parent_id' => 1]));
     $collection->push(new BaseItem(['id' => 3]));
@@ -58,7 +58,7 @@ it('can handle multiple starts node with children', function () {
 
 it('can handle multiple children', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push($parent = new BaseItem(['id' => 1]));
     $collection->push($child = new BaseItem(['id' => 2, 'parent_id' => 1]));
     $collection->push($child2 = new BaseItem(['id' => 3, 'parent_id' => 1]));
@@ -76,7 +76,7 @@ it('can handle multiple children', function () {
 
 it('can handle 10 levels deep', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push($parent = new BaseItem(['id' => 1]));
     $collection->push($child = new BaseItem(['id' => 2, 'parent_id' => 1]));
     $collection->push($child2 = new BaseItem(['id' => 3, 'parent_id' => 2]));
@@ -118,7 +118,7 @@ it('can handle 10 levels deep', function () {
 
 it('can handle custom relation name', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push($parent = new BaseItem(['id' => 1]));
     $collection->push($child = new BaseItem(['id' => 2, 'parent_id' => 1]));
 
@@ -134,7 +134,7 @@ it('can handle custom relation name', function () {
 
 it('can handle custom local identifier', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push(new BaseItem(['custom_primary_key' => 1]));
     $collection->push($child = new BaseItem(['custom_primary_key' => 2, 'parent_id' => 1]));
 
@@ -149,7 +149,7 @@ it('can handle custom local identifier', function () {
 
 it('can handle custom parent identifier', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push(new BaseItem(['id' => 1]));
     $collection->push($child = new BaseItem(['id' => 2, 'custom_parent_id' => 1]));
 
@@ -164,7 +164,7 @@ it('can handle custom parent identifier', function () {
 
 it('is not impacted by sort order', function () {
     /* Setup */
-    $collection = new Collection();
+    $collection = new Collection;
     $collection->push($parent = new BaseItem(['id' => 1]));
     $collection->push($child4 = new BaseItem(['id' => 5, 'parent_id' => 4]));
     $collection->push($child2 = new BaseItem(['id' => 3, 'parent_id' => 2]));
@@ -212,11 +212,11 @@ it('can work with support collections', function () {
 it('can work with support collections of stdClass', function () {
     $collection = collect();
 
-    $parent = new stdClass();
+    $parent = new stdClass;
     $parent->id = 1;
     $parent->parent_id = null;
 
-    $child = new stdClass();
+    $child = new stdClass;
     $child->id = 2;
     $child->parent_id = 1;
 

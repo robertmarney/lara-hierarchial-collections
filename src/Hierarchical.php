@@ -16,9 +16,7 @@ class Hierarchical implements Arrayable
     /**
      * @param  Collection<int, object>  $items
      */
-    public function __construct(private Collection $items, private string $parentIdentifier = 'parent_id', private string $relationName = 'children', private string $localIdentifier = 'id')
-    {
-    }
+    public function __construct(private Collection $items, private string $parentIdentifier = 'parent_id', private string $relationName = 'children', private string $localIdentifier = 'id') {}
 
     /**
      * Create a new instance of the Hierarchical class
@@ -89,7 +87,7 @@ class Hierarchical implements Arrayable
     public function descendantsOf(mixed $itemOrId): Collection
     {
         if (! $startingValue = $this->toItem($itemOrId)) {
-            return new Collection();
+            return new Collection;
         }
 
         return $this->attachChildrenToParent(new Collection([$startingValue]), $this->items);
@@ -104,7 +102,7 @@ class Hierarchical implements Arrayable
     public function siblingsOf(mixed $itemOrId): Collection
     {
         if (! $item = $this->toItem($itemOrId)) {
-            return new Collection();
+            return new Collection;
         }
 
         return $this->items
@@ -188,7 +186,7 @@ class Hierarchical implements Arrayable
         $id = $this->toId($itemOrId);
 
         if (! $endingValue = $this->items->firstWhere($this->localIdentifier, $id)) {
-            return new Collection();
+            return new Collection;
         }
 
         return $this->attachToParent($endingValue);
