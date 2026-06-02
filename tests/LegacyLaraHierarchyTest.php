@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Database\Eloquent\Collection;
+use RCM\LaraHierarchy\LaraHierarchy;
 use RCM\LaraHierarchy\Tests\Fixtures\BaseItem;
 
 beforeEach(function () {
-    $this->service = new RCM\LaraHierarchy\LaraHierarchy;
+    $this->service = new LaraHierarchy;
 });
 
 it('can handle multiple start nodes with no children', function () {
