@@ -14,11 +14,11 @@ jobs:
         dependency-version: [prefer-lowest, prefer-stable]
         include:
           -   laravel: 13.*
-              testbench: 11.*
+              testbench: 11.*-dev
           -   laravel: 12.*
-              testbench: 10.*
+              testbench: 10.*-dev
           -   laravel: 11.*
-              testbench: 9.*
+              testbench: 9.*-dev
           -   laravel: 10.*
               testbench: 8.*
         exclude:
